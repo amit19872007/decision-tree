@@ -1,0 +1,42 @@
+my_data <- read.csv("C:/Users/lenovo/Desktop/R/Company_Data.csv")
+View(my_data)
+library(caTools)
+
+set.seed(200)
+
+summary(my_data)
+structure(my_data)
+
+str(my_data)
+
+my_data$Sales <- as.factor(my_data$Sales) #converting numerical variable into categorical variable
+str(my_data)
+
+
+table(my_data$Sales)
+levels(my_data$Sales)
+
+sample <- sample.split(my_data$Sales, SplitRatio = 0.70)
+sample
+
+trainData <- subset(my_data, sample==TRUE)
+trainData
+
+testData <- subset(my_data, sample==FALSE)
+
+table(testData$Sales)
+levels(testData$Sales)
+
+library(rpart)
+sales_mod <- rpart(Sales~. , data = trainData)
+sales_mod
+
+
+install.packages("rattle") #, dependencies=c("Depends", "Suggests"))
+library(rattle)
+library(rpart)
+fancyRpartPlot(sales_mod)
+pred <- predict(sales_mod,testData, type="class")
+table(pred)
+pred1 <- data.frame(pred)
+View(pred1)
